@@ -1,8 +1,8 @@
 # Introduction
 
-This will build **either** an new kind of XLX reflector **or** a tri-mode XRF reflector. The XLX is new because it can support out-going DExtra links, by adding a new DExtra Peer type *and* it has many changes designed to increase reliability and stability. The XRF reflector built from this source supports inbound DExtra, DPlus **and DCS connections**. Like XLX, XRF also supports out-going DExtra linking. Please note that for now, only one DExtra peer link per node is supported.
+This will build **either** a new kind of XLX reflector **or** a tri-mode XRF reflector. The XLX is new because it can support out-going DExtra links, by adding a new DExtra Peer type *and* it has many changes designed to increase reliability and stability. The XRF reflector built from this source supports inbound DExtra, DPlus **and DCS connections**. Like XLX, XRF also supports out-going DExtra linking. Please note that for now, only one DExtra peer link per node is supported.
 
-This is an improved version of the multi-protocol Reflector. Nearly all std::vector containers have been replaced with std::list containers. This is a far better choice for any collection where it is common to delete elements that are not at the end of the collection. In most cases, Also in this package, no classes are derived from any standard containers. Because standard containers don't have a virtual desctructor, this is highly ill-advised and while the origin XLX server worked using such derivations, it represents a possible serious problem when considering future development. Also, the clean-up routines designed to be executed when shutting down were unreachable as designed and this has been fixed. Please note that it can take several seconds to complete the shutdown while some execution threads complete their i/o cycle.
+This is an improved version of the multi-protocol Reflector. Nearly all std::vector containers have been replaced with std::list containers. This is a far better choice for any collection where it is common to delete elements that are not at the end of the collection. In most cases, Also in this package, no classes are derived from any standard containers. Because standard containers don't have a virtual destructor, this is highly ill-advised and while the origin XLX server worked using such derivations, it represents a possible serious problem when considering future development. Also, the clean-up routines designed to be executed when shutting down were unreachable as designed and this has been fixed. Please note that it can take several seconds to complete the shutdown while some execution threads complete their i/o cycle.
 
 The Makefiles have been improved to provide automatically generated dependencies. This significantly speeds up updating time and eliminates build errors. Be sure to do a `make clean` before you switch your build type between XLX and XRF.
 
@@ -151,8 +151,9 @@ XLX Server requires the following ports to be open and forwarded properly for in
 
 # Copyright
 
-- � 2016 Luc Engelmann LX1IQ
-- � 2016 Thomas A. Early, N7TAE
+- © 2016 Luc Engelmann LX1IQ
+- © 2016 Jean-Luc Deltombe (LX3JL). All rights reserved. (for the DExtra Peer.)
+- © 2018-2019 Thomas A. Early, N7TAE
 
 
 The XLX Multiprotocol Gateway Reflector Server is part of the software system
