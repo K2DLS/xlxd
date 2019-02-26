@@ -27,11 +27,13 @@ install :
 	ln -s $(shell pwd)/xrfd.whitelist $(CFGDIR)
 	ln -s $(shell pwd)/xrfd.linklist $(CFGDIR)
 	cp -f ../systemd/xrfd.service /lib/systemd/system/
+#	Uncomment the following line for a compact, stripped binary
+#	strip -p $(EXECUTABLE)
 	cp -f $(EXECUTABLE) $(BINDIR)
 	systemctl enable xrfd.service
 	systemctl daemon-reload
 	# xrfd is now controlled with systemd. The service has been enabled. You can start it
-	# with systemctl start rxfd
+	# with systemctl start xrfd
 
 uninstall :
 	rm -f $(CFGDIR)/xrfd.blacklist

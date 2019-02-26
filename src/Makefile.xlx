@@ -4,6 +4,7 @@
 # in the main.h file as well as the systemd service file.
 BINDIR=/usr/local/bin
 CFGDIR=/usr/local/etc
+DATADIR=/var/lib/xlxd
 
 EXECUTABLE=xlxd
 GCC=g++
@@ -34,7 +35,10 @@ install :
 	ln -s $(shell pwd)/$(EXECUTABLE).whitelist $(CFGDIR)/$(EXECUTABLE).whitelist
 	ln -s $(shell pwd)/$(EXECUTABLE).interlink $(CFGDIR)/$(EXECUTABLE).interlink
 	cp -f ../systemd/$(EXECUTABLE).service /lib/systemd/system/
+#	Uncomment the following line for a compact, stripped binary	
+#	strip -p $(EXECUTABLE)
 	cp -f $(EXECUTABLE) $(BINDIR)
+	mkdir -p $(DATADIR)
 	systemctl enable $(EXECUTABLE).service
 	systemctl daemon-reload
 	systemctl start xlxd
@@ -44,5 +48,6 @@ uninstall :
 	rm -f $(CFGDIR)/$(EXECUTABLE).whitelist
 	rm -f $(CFGDIR)/$(EXECUTABLE).interlink
 	systemctl stop $(EXECUTABLE).service
+	rm -f $(CFGDIR)/dmrid.dat
 	systemctl disable $(EXECUTABLE).service
 	systemctl daemon-reload

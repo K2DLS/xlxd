@@ -120,11 +120,6 @@ Please note that your www root directory might be some place else. There are one
 
 * **pgs/config.inc.php** - At a minimum set your email address, country and comment. **Do not** enable the calling home feature if you built an XRF reflector. This feature is for **XLX systems only**.
 
-#### Give the dashboard read access to the server log file
-```
-sudo chmod +r /var/log/messages
-```
-
 #### Reboot server to see if the auto-start is working
 ```
 sudo shutdown -r now

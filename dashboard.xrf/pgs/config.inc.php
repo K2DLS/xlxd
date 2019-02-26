@@ -50,7 +50,7 @@ $PageOptions['MetaRobots']                           = 'index,follow';          
 
 $PageOptions['UserPage']['ShowFilter']               = true;                                                         // Show Filter on Users page
 
-$Service['PIDFile']                                  = '/var/log/xrfd.pid';
+$Service['PIDFile']                                  = '/var/run/xrfd.pid';
 $Service['XMLFile']                                  = '/var/log/xrfd.xml';
 
 $CallingHome['Active']                               = false;					               // xlx phone home, true or false

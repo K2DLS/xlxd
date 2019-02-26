@@ -32,3 +32,5 @@ ambed
 
 #user file
 main.h
+Makefile
+src/xlxd.*

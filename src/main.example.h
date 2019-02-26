@@ -139,7 +139,7 @@
 // DMRid database -----------------------------------------------
 
 #define DMRIDDB_USE_RLX_SERVER	1							// 1 = use http, 0 = use local file
-#define DMRIDDB_PATH			"/usr/local/etc/dmrid.dat"	// local file path
+#define DMRIDDB_PATH			"/var/lib/xlxd/dmrid.dat"	// local file path
 #define DMRIDDB_REFRESH_RATE	180							// in minutes
 #endif
 
@@ -153,15 +153,15 @@
 // system paths -------------------------------------------------
 
 #ifdef IS_XLX
-#define XML_PATH			"/var/log/xlxd.xml"
-#define PIDFILE_PATH		"/var/log/xlxd.pid"
+#define XML_PATH		"/var/log/xlxd.xml"
+#define PIDFILE_PATH		"/var/run/xlxd.pid"
 #define WHITELIST_PATH		"/usr/local/etc/xlxd.whitelist"
 #define BLACKLIST_PATH		"/usr/local/etc/xlxd.blacklist"
 #define INTERLINKLIST_PATH	"/usr/local/etc/xlxd.interlink"
 #define DEBUGDUMP_PATH		"/var/log/xlxd.debug"
 #else
-#define XML_PATH			"/var/log/xrfd.xml"
-#define PIDFILE_PATH		"/var/log/xrfd.pid"
+#define XML_PATH		"/var/log/xrfd.xml"
+#define PIDFILE_PATH		"/var/run/xrfd.pid"
 #define WHITELIST_PATH		"/usr/local/etc/xrfd.whitelist"
 #define BLACKLIST_PATH		"/usr/local/etc/xrfd.blacklist"
 #define INTERLINKLIST_PATH	"/usr/local/etc/xrfd.linklist"
