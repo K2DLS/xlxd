@@ -88,7 +88,7 @@ public:
 
 	// task
 	static void Thread(CProtocol *);
-	virtual void Task(void) {}
+	virtual void Task(void) = 0;
 
 protected:
 	// packet encoding helpers
@@ -110,7 +110,7 @@ protected:
 	virtual void HandleQueue(void);
 
 	// keepalive helpers
-	virtual void HandleKeepalives(void) {}
+	virtual void HandleKeepalives(void) = 0;
 
 	// syntax helper
 	bool IsNumber(char) const;
