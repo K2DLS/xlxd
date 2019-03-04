@@ -6,7 +6,7 @@
 //
 //  Created by Jean-Luc Deltombe (LX3JL) on 01/11/2015.
 //  Copyright © 2015 Jean-Luc Deltombe (LX3JL). All rights reserved.
-//  Copyright © 2018 Thomas A. Early, N7TAE
+//  Copyright © 2018-2019 Thomas A. Early, N7TAE
 //
 // ----------------------------------------------------------------------------
 //    This file is part of xlxd.
@@ -100,10 +100,10 @@ protected:
 	// stream helpers
 	virtual bool OnDvHeaderPacketIn(CDvHeaderPacket *, const CIp &) { return false; }
 	virtual void OnDvFramePacketIn(CDvFramePacket *, const CIp * = NULL);
-	virtual void OnDvLastFramePacketIn(CDvLastFramePacket *, const CIp * = NULL);
 
 	// stream handle helpers
 	CPacketStream *GetStream(uint16, const CIp * = NULL);
+	void CloseStreamForDvLastFramePacket(CDvLastFramePacket *, const CIp * = NULL);
 	void CheckStreamsTimeout(void);
 
 	// queue helper

@@ -6,6 +6,7 @@
 //
 //  Created by Jean-Luc Deltombe (LX3JL) on 28/01/2016.
 //  Copyright © 2015 Jean-Luc Deltombe (LX3JL). All rights reserved.
+//  Copyright © 2018-2019 Thomas A. Early, N7TAE
 //
 // ----------------------------------------------------------------------------
 //    This file is part of xlxd.
@@ -62,7 +63,6 @@ protected:
 	// stream helpers
 	bool OnDvHeaderPacketIn(CDvHeaderPacket *, const CIp &);
 	void OnDvFramePacketIn(CDvFramePacket *, const CIp * = NULL);
-	void OnDvLastFramePacketIn(CDvLastFramePacket *, const CIp * = NULL);
 
 	// packet decoding helpers
 	bool IsValidKeepAlivePacket(const CBuffer &, CCallsign *);

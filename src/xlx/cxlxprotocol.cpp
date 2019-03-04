@@ -4,7 +4,7 @@
 //
 //  Created by Jean-Luc Deltombe (LX3JL) on 28/01/2016.
 //  Copyright © 2015 Jean-Luc Deltombe (LX3JL). All rights reserved.
-//  Copyright © 2018 Thomas A. Early, N7TAE
+//  Copyright © 2018-2019 Thomas A. Early, N7TAE
 //
 // ----------------------------------------------------------------------------
 //    This file is part of xlxd.
@@ -72,7 +72,7 @@ void CXlxProtocol::Task(void)
 	CVersion            Version;
 	CDvHeaderPacket     *Header;
 	CDvFramePacket      *Frame;
-	CDvLastFramePacket  *LastFrame;
+	CDvLastFramePacket  *LastFrame = NULL;
 
 	// any incoming packet ?
 	if ( m_Socket.Receive(&Buffer, &Ip, 20) != -1 ) {
@@ -96,8 +96,9 @@ void CXlxProtocol::Task(void)
 		} else if ( (LastFrame = IsValidDvLastFramePacket(Buffer)) != NULL ) {
 			//std::cout << "XLX (DExtra) DV last frame" << std::endl;
 
-			// mark it as non-local and push it on the packet stream
-			OnDvLastFramePacketIn(LastFrame, &Ip);
+			LastFrame->SetRemotePeerOrigin();
+
+			OnDvFramePacketIn(LastFrame, &Ip);
 		} else if ( IsValidConnectPacket(Buffer, &Callsign, Modules, &Version) ) {
 			std::cout << "XLX ("
 					  << Version.GetMajor() << "." << Version.GetMinor() << "." << Version.GetRevision()
@@ -181,6 +182,9 @@ void CXlxProtocol::Task(void)
 
 	// handle queue from reflector
 	HandleQueue();
+
+	if (LastFrame)
+		CloseStreamForDvLastFramePacket(LastFrame, &Ip);
 
 	// keep alive
 	if ( m_LastKeepaliveTime.DurationSinceNow() > XLX_KEEPALIVE_PERIOD ) {
@@ -408,16 +412,6 @@ void CXlxProtocol::OnDvFramePacketIn(CDvFramePacket *DvFrame, const CIp *Ip)
 	// and call base class
 	CDextraProtocol::OnDvFramePacketIn(DvFrame, Ip);
 }
-
-void CXlxProtocol::OnDvLastFramePacketIn(CDvLastFramePacket *DvFrame, const CIp *Ip)
-{
-	// tag packet as remote peer origin
-	DvFrame->SetRemotePeerOrigin();
-
-	// and call base class
-	CDextraProtocol::OnDvLastFramePacketIn(DvFrame, Ip);
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // packet decoding helpers

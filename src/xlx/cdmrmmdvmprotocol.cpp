@@ -4,7 +4,7 @@
 //
 //  Created by Jean-Luc Deltombe (LX3JL) on 104/03/2017.
 //  Copyright © 2015 Jean-Luc Deltombe (LX3JL). All rights reserved.
-//  Copyright © 2018 Thomas A. Early, N7TAE
+//  Copyright © 2018-2019 Thomas A. Early, N7TAE
 //
 // ----------------------------------------------------------------------------
 //    This file is part of xlxd.
@@ -94,7 +94,7 @@ void CDmrmmdvmProtocol::Task(void)
 	uint8               CallType;
 	CDvHeaderPacket     *Header;
 	CDvFramePacket      *Frames[3];
-	CDvLastFramePacket  *LastFrame;
+	CDvLastFramePacket  *LastFrame = NULL;
 
 	// handle incoming packets
 	if ( m_Socket.Receive(&Buffer, &Ip, 20) != -1 ) {
@@ -120,7 +120,7 @@ void CDmrmmdvmProtocol::Task(void)
 		} else if ( IsValidDvLastFramePacket(Buffer, &LastFrame) ) {
 			//std::cout << "DMRmmdvm DV last frame"  << std::endl;
 
-			OnDvLastFramePacketIn(LastFrame, &Ip);
+			OnDvFramePacketIn(LastFrame, &Ip);
 		} else if ( IsValidConnectPacket(Buffer, &Callsign, Ip) ) {
 			std::cout << "DMRmmdvm connect packet from " << Callsign << " at " << Ip << std::endl;
 
@@ -221,6 +221,9 @@ void CDmrmmdvmProtocol::Task(void)
 	// handle queue from reflector
 	HandleQueue();
 
+	if ( LastFrame != NULL ) {
+		CloseStreamForDvLastFramePacket(LastFrame, &Ip);
+	}
 
 	// keep client alive
 	if ( m_LastKeepaliveTime.DurationSinceNow() > DMRMMDVM_KEEPALIVE_PERIOD ) {

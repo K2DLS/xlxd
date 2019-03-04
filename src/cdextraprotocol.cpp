@@ -4,7 +4,7 @@
 //
 //  Created by Jean-Luc Deltombe (LX3JL) on 01/11/2015.
 //  Copyright © 2015 Jean-Luc Deltombe (LX3JL). All rights reserved.
-//  Copyright © 2018 Thomas A. Early, N7TAE
+//  Copyright © 2018-2019 Thomas A. Early, N7TAE
 //
 // ----------------------------------------------------------------------------
 //    This file is part of xlxd.
@@ -70,7 +70,7 @@ void CDextraProtocol::Task(void)
 	char                ToLinkModule;
 	int                 ProtRev;
 	CDvHeaderPacket     *Header;
-	CDvFramePacket      *Frame;
+	CDvFramePacket      *Frame = NULL;
 	CDvLastFramePacket  *LastFrame;
 
 	// any incoming packet ?
@@ -96,7 +96,7 @@ void CDextraProtocol::Task(void)
 			//std::cout << "DExtra DV last frame" << std::endl;
 
 			// handle it
-			OnDvLastFramePacketIn(LastFrame, &Ip);
+			OnDvFramePacketIn(LastFrame, &Ip);
 		} else if ( IsValidConnectPacket(Buffer, &Callsign, &ToLinkModule, &ProtRev) ) {
 			std::cout << "DExtra connect packet for module " << ToLinkModule << " from " << Callsign << " at " << Ip << " rev " << ProtRev << std::endl;
 
@@ -181,6 +181,10 @@ void CDextraProtocol::Task(void)
 
 	// handle queue from reflector
 	HandleQueue();
+
+	if ( LastFrame != NULL ) {
+		CloseStreamForDvLastFramePacket(LastFrame, &Ip);
+	}
 
 	// keep client alive
 	if ( m_LastKeepaliveTime.DurationSinceNow() > DEXTRA_KEEPALIVE_PERIOD ) {

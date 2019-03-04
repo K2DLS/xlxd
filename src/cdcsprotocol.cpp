@@ -4,7 +4,7 @@
 //
 //  Created by Jean-Luc Deltombe (LX3JL) on 07/11/2015.
 //  Copyright © 2015 Jean-Luc Deltombe (LX3JL). All rights reserved.
-//  Copyright © 2018 Thomas A. Early, N7TAE
+//  Copyright © 2018-2019 Thomas A. Early, N7TAE
 //
 // ----------------------------------------------------------------------------
 //    This file is part of xlxd.
@@ -68,7 +68,7 @@ void CDcsProtocol::Task(void)
 	CCallsign           Callsign;
 	char                ToLinkModule;
 	CDvHeaderPacket     *Header;
-	CDvFramePacket      *Frame;
+	CDvFramePacket      *Frame = NULL;
 
 	// handle incoming packets
 	if ( m_Socket.Receive(&Buffer, &Ip, 20) != -1 ) {
@@ -84,13 +84,11 @@ void CDcsProtocol::Task(void)
 				if ( !Frame->IsLastPacket() ) {
 					//std::cout << "DCS DV frame" << std::endl;
 					OnDvFramePacketIn(Frame, &Ip);
-				} else {
-					//std::cout << "DCS DV last frame" << std::endl;
-					OnDvLastFramePacketIn((CDvLastFramePacket *)Frame, &Ip);
 				}
 			} else {
 				delete Header;
 				delete Frame;
+				Frame = NULL;
 			}
 		} else if ( IsValidConnectPacket(Buffer, &Callsign, &ToLinkModule) ) {
 			std::cout << "DCS connect packet for module " << ToLinkModule << " from " << Callsign << " at " << Ip << std::endl;
@@ -161,6 +159,10 @@ void CDcsProtocol::Task(void)
 
 	// handle queue from reflector
 	HandleQueue();
+
+	if ( NULL!=Frame && Frame->IsLastPacket() ) {
+		CloseStreamForDvLastFramePacket((CDvLastFramePacket *)Frame, &Ip);
+	}
 
 	// keep client alive
 	if ( m_LastKeepaliveTime.DurationSinceNow() > DCS_KEEPALIVE_PERIOD ) {

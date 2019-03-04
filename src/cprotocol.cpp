@@ -4,7 +4,7 @@
 //
 //  Created by Jean-Luc Deltombe (LX3JL) on 01/11/2015.
 //  Copyright © 2015 Jean-Luc Deltombe (LX3JL). All rights reserved.
-//  Copyright © 2018 Thomas A. Early, N7TAE
+//  Copyright © 2018-2019 Thomas A. Early, N7TAE
 //
 // ----------------------------------------------------------------------------
 //    This file is part of xlxd.
@@ -138,24 +138,6 @@ void CProtocol::OnDvFramePacketIn(CDvFramePacket *Frame, const CIp *Ip)
 	}
 }
 
-void CProtocol::OnDvLastFramePacketIn(CDvLastFramePacket *Frame, const CIp *Ip)
-{
-	// find the stream
-	CPacketStream *stream = GetStream(Frame->GetStreamId(), Ip);
-	if ( stream == NULL ) {
-		std::cerr << "WARNING: orphaned DvLastFramPacket SID " << Frame->GetStreamId() << " from " << *Ip << std::endl;
-		delete Frame;
-	} else {
-		// push
-		stream->Lock();
-		stream->Push(Frame);
-		stream->Unlock();
-
-		// and close the stream
-		g_Reflector.CloseStream(stream);
-	}
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////
 // stream handle helpers
 
@@ -173,6 +155,13 @@ CPacketStream *CProtocol::GetStream(uint16 uiStreamId, const CIp *Ip)
 	}
 	// done
 	return NULL;
+}
+
+void CProtocol::CloseStreamForDvLastFramePacket(CDvLastFramePacket *Frame, const CIp *Ip)
+{
+	CPacketStream *stream = GetStream(Frame->GetStreamId(), Ip);
+	if (stream)
+		g_Reflector.CloseStream(stream);
 }
 
 void CProtocol::CheckStreamsTimeout(void)

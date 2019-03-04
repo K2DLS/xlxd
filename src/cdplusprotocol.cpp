@@ -4,7 +4,7 @@
 //
 //  Created by Jean-Luc Deltombe (LX3JL) on 01/11/2015.
 //  Copyright © 2015 Jean-Luc Deltombe (LX3JL). All rights reserved.
-//  Copyright © 2018 Thomas A. Early, N7TAE
+//  Copyright © 2018-2019 Thomas A. Early, N7TAE
 //
 // ----------------------------------------------------------------------------
 //    This file is part of xlxd.
@@ -69,7 +69,7 @@ void CDplusProtocol::Task(void)
 	CCallsign           Callsign;
 	CDvHeaderPacket     *Header;
 	CDvFramePacket      *Frame;
-	CDvLastFramePacket  *LastFrame;
+	CDvLastFramePacket  *LastFrame = NULL;
 
 	// handle incoming packets
 	if ( m_Socket.Receive(&Buffer, &Ip, 20) != -1 ) {
@@ -93,7 +93,7 @@ void CDplusProtocol::Task(void)
 			//std::cout << "DPlus DV last frame" << std::endl;
 
 			// handle it
-			OnDvLastFramePacketIn(LastFrame, &Ip);
+			OnDvFramePacketIn(LastFrame, &Ip);
 		} else if ( IsValidConnectPacket(Buffer) ) {
 			std::cout << "DPlus connect request packet from " << Ip << std::endl;
 
@@ -155,6 +155,10 @@ void CDplusProtocol::Task(void)
 
 	// handle queue from reflector
 	HandleQueue();
+
+	if (LastFrame) {
+		CloseStreamForDvLastFramePacket(LastFrame, &Ip);
+	}
 
 	// keep client alive
 	if ( m_LastKeepaliveTime.DurationSinceNow() > DPLUS_KEEPALIVE_PERIOD ) {
