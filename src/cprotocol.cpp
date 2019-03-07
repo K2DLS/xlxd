@@ -129,6 +129,7 @@ void CProtocol::OnDvFramePacketIn(CDvFramePacket *Frame, const CIp *Ip)
 	if ( stream == NULL ) {
 		std::cerr << "WARNING: orphaned DvFramePacket SID " << Frame->GetStreamId() << " from " << *Ip << std::endl;
 		delete Frame;
+		Frame = NULL;
 	} else {
 		//std::cout << "DV frame" << "from "  << *Ip << std::endl;
 		// and push
