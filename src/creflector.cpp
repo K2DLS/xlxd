@@ -251,6 +251,10 @@ void CReflector::CloseStream(CPacketStream *stream)
 				// wait a bit
 				CTimePoint::TaskSleepFor(10);
 			}
+			if (m_bStopThreads) {
+				stream->Close();
+				return;
+			}
 		} while (!bEmpty);
 
 		// lock clients
