@@ -181,8 +181,8 @@ bool CGateKeeper::MayTransmit(const CCallsign &callsign, const CIp &ip, int prot
 void CGateKeeper::Thread(CGateKeeper *This)
 {
 	while ( !This->m_bStopThread ) {
-		// Wait 30 seconds
-		CTimePoint::TaskSleepFor(30000);
+		for (int i=0; i<6 && !This->m_bStopThread; i++)
+			std::this_thread::sleep_for(std::chrono::seconds(5));
 
 		// have lists files changed ?
 		if ( This->m_NodeWhiteList.NeedReload() ) {
