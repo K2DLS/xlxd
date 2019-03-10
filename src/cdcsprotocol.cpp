@@ -155,13 +155,13 @@ void CDcsProtocol::Task(void)
 	}
 
 	if (Frame)
-		std::cout << "Just before CheckStreamsTimeout(), *Frame is " << Frame->IsLastPacket() ? "last" "not last" << " packet" << std::endl;
+		std::cout << "Just before CheckStreamsTimeout(), *Frame is " << (Frame->IsLastPacket() ? "last" : "not last") << " packet" << std::endl;
 
 	// handle end of streaming timeout
 	CheckStreamsTimeout();
 
 	if (Frame)
-		std::cout << "Just before HandleQueue(), *Frame is " << Frame->IsLastPacket() ? "last" "not last" << " packet" << std::endl;
+		std::cout << "Just before HandleQueue(), *Frame is " << (Frame->IsLastPacket() ? "last" : "not last") << " packet" << std::endl;
 
 	// handle queue from reflector
 	HandleQueue();
