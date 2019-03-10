@@ -74,7 +74,7 @@ void CDcsProtocol::Task(void)
 	if ( m_Socket.Receive(&Buffer, &Ip, 20) != -1 ) {
 		// crack the packet
 		if ( IsValidDvPacket(Buffer, &Header, &Frame) ) {
-			//std::cout << "DCS DV packet" << std::endl;
+			std::cout << "DCS DV packet" << std::endl;
 
 			// callsign muted?
 			if ( g_GateKeeper.MayTransmit(Header->GetMyCallsign(), Ip, PROTOCOL_DCS, Header->GetRpt2Module()) ) {
@@ -82,7 +82,7 @@ void CDcsProtocol::Task(void)
 				OnDvHeaderPacketIn(Header, Ip);
 
 				if ( !Frame->IsLastPacket() ) {
-					//std::cout << "DCS DV frame" << std::endl;
+					std::cout << "DCS DV frame" << std::endl;
 					OnDvFramePacketIn(Frame, &Ip);
 				}
 			} else {
@@ -154,8 +154,14 @@ void CDcsProtocol::Task(void)
 		}
 	}
 
+	if (Frame)
+		std::cout << "Just before CheckStreamsTimeout(), *Frame is " << Frame->IsLastPacket() ? "last" "not last" << " packet" << std::endl;
+
 	// handle end of streaming timeout
 	CheckStreamsTimeout();
+
+	if (Frame)
+		std::cout << "Just before HandleQueue(), *Frame is " << Frame->IsLastPacket() ? "last" "not last" << " packet" << std::endl;
 
 	// handle queue from reflector
 	HandleQueue();
