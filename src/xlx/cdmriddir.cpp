@@ -85,7 +85,7 @@ void CDmridDir::Thread(CDmridDir *This)
 	int count = 0;
 	while ( !This->m_bStopThread ) {
 		// Wait for 2 second
-		CTimePoint::TaskSleepFor(2000);
+		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
 		// have we waited DMRIDDB_REFRESH_RATE minutes AND has the file changed?
 		if ( ( ++count >= limit ) && This->NeedReload() ) {

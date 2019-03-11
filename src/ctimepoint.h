@@ -41,9 +41,6 @@ public:
 	void   Now(void) { m_TimePoint = std::chrono::steady_clock::now(); }
 	double DurationSinceNow(void) const;
 
-	// task
-	static void TaskSleepFor(uint);
-
 protected:
 	// data
 	std::chrono::steady_clock::time_point m_TimePoint;

@@ -42,12 +42,3 @@ double CTimePoint::DurationSinceNow(void) const
 	std::chrono::steady_clock::duration time_span = (Now - m_TimePoint);
 	return double(time_span.count()) * std::chrono::steady_clock::period::num / std::chrono::steady_clock::period::den;
 }
-
-////////////////////////////////////////////////////////////////////////////////////////
-// task
-
-void CTimePoint::TaskSleepFor(uint ms)
-{
-	std::chrono::milliseconds timespan(ms);
-	std::this_thread::sleep_for(timespan);
-}

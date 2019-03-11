@@ -248,8 +248,11 @@ void CReflector::CloseStream(CPacketStream *stream)
 			bEmpty = stream->empty();
 			stream->Unlock();
 			if ( !bEmpty ) {
-				// wait a bit
-				CTimePoint::TaskSleepFor(10);
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			}
+			if (m_bStopThreads) {
+				stream->Close();
+				return;
 			}
 		} while (!bEmpty);
 
@@ -340,7 +343,7 @@ void CReflector::RouterThread(CReflector *This, CPacketStream *streamIn)
 			packet = NULL;
 		} else {
 			// wait a bit
-			CTimePoint::TaskSleepFor(10);
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		}
 	}
 }
@@ -365,7 +368,7 @@ void CReflector::XmlReportThread(CReflector *This)
 		}
 
 		// and wait a bit
-		CTimePoint::TaskSleepFor(XML_UPDATE_PERIOD * 1000);
+		std::this_thread::sleep_for(std::chrono::seconds(XML_UPDATE_PERIOD));
 	}
 }
 
@@ -440,7 +443,7 @@ void CReflector::JsonReportThread(CReflector *This)
 				case NOTIFICATION_NONE:
 				default:
 					// nothing to do, just sleep a bit
-					CTimePoint::TaskSleepFor(250);
+					std::this_thread::sleep_for(std::chrono::milliseconds(250));
 					break;
 				}
 			}
