@@ -46,17 +46,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // defines
 
-// parameters
-
-// YOU WILL CERTAINLY NEED TO CHANGE THE FIRST TWO VALUES!!!!!!
-
-#define REFLECTOR_CALLSIGN		"XLX???"	// this could also be an XRF???
-#define MY_IP_ADDRESS			"1.2.3.4"
-#ifdef IS_XLX
-#define TRANSCODER_IP_ADDRESS	"127.0.0.1"
-#define TRANSCODED_CHANNELS		"ABCDF"		// only these channels will be trancoded
-#endif
-
 // global ------------------------------------------------------
 
 #define JSON_MONITOR

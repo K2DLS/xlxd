@@ -77,7 +77,7 @@ int main(int argc, const char *argv[])
     // check for valid number of args
     if ( argc > 2 ) {
         std::cerr << "Usage: ambed IP.ADDR.TO.BIND" << std::endl;
-        std::cerr << "IP Address Parameter is optional.  If ommited, ambed binds to all interfaces." << std::endl;
+        std::cerr << "IP Address Parameter is optional.  If ommited, ambed binds to 127.0.0.1." << std::endl;
         return EXIT_FAILURE;
     }
 

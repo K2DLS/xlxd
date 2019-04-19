@@ -5,7 +5,8 @@ After=systemd-user-session.service network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/xlxd
+EnvironmentFile=-/etc/default/xlxd
+ExecStart=/usr/local/bin/xlxd $REFLECTOR $MYIP $TRANSIP
 Restart=always
 
 [Install]

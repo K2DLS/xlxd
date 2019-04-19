@@ -27,8 +27,8 @@ install :
 	ln -s $(shell pwd)/xrfd.whitelist $(CFGDIR)
 	ln -s $(shell pwd)/xrfd.linklist $(CFGDIR)
 	cp -f ../systemd/xrfd.service /lib/systemd/system/
-#	Uncomment the following line for a compact, stripped binary
-#	strip -p $(EXECUTABLE)
+	if [ ! -f /etc/default/xrfd ]; then cp ../config/xrfd /etc/default; fi
+	strip -p $(EXECUTABLE)
 	cp -f $(EXECUTABLE) $(BINDIR)
 	systemctl enable xrfd.service
 	systemctl daemon-reload

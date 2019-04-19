@@ -25,11 +25,11 @@
 
 #include <signal.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "version.h"
 #include "main.h"
 #include "creflector.h"
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // global objects
@@ -55,7 +55,7 @@ static void sigCatch(int signum)
 	return;
 }
 
-int main(int argc, const char ** /*argv*/)
+int main(int argc, const char *argv[])
 {
 	struct sigaction act;
 
@@ -83,16 +83,52 @@ int main(int argc, const char ** /*argv*/)
 		return EXIT_FAILURE;
 	}
 
-	// check arguments
-	if ( argc != 1 ) {
-	#ifdef IS_XLX
-		std::cerr << "Usage: xlxd" << std::endl;
-	#else
-		std::cerr << "Usage: xrfd" << std::endl;
-	#endif
-		std::cerr << "Reflector Callsign and IP address are set in main.h" << std::endl;
-		return EXIT_FAILURE;
+        // Check for valid arguments
+	char REFLECTOR_CALLSIGN[8];
+        char MY_IP_ADDRESS[16];
+	strcpy(REFLECTOR_CALLSIGN, "CHNGME");
+	strcpy(MY_IP_ADDRESS, "0.0.0.0");
+
+#ifdef IS_XLX
+	char TRANSCODER_IP_ADDRESS[16];
+	strcpy(TRANSCODER_IP_ADDRESS, "127.0.0.1");
+
+	if ( argc == 4 ) {
+	    strcpy(REFLECTOR_CALLSIGN, argv[1]);
+            strcpy(MY_IP_ADDRESS, argv[2]);
+	    strcpy(TRANSCODER_IP_ADDRESS, argv[3]); 
 	}
+	else if ( argc == 3 ) {
+	    strcpy(REFLECTOR_CALLSIGN, argv[1]);
+            strcpy(MY_IP_ADDRESS, argv[2]);
+	}
+	else if ( argc == 2 ) {
+            strcpy(REFLECTOR_CALLSIGN, argv[1]);
+	}
+        else if ( argc > 4) {
+            std::cerr << "Usage: xlxd <reflname> <bind IP addr> <transcoder IP addr>\n" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+	printf("\nReflector Name: %s\n", REFLECTOR_CALLSIGN);
+	printf("Bind IP Address: %s\n", MY_IP_ADDRESS);
+	printf("Transcoder IP Address: %s\n", TRANSCODER_IP_ADDRESS);
+#else
+        if ( argc == 3 ) {
+            strcpy(REFLECTOR_CALLSIGN, argv[1]);
+            strcpy(MY_IP_ADDRESS, argv[2]);
+	}
+        else if ( argc == 2 ) {
+            strcpy(REFLECTOR_CALLSIGN, argv[1]);
+        }
+        else if ( argc > 3) {
+            std::cerr << "Usage: xrfd <reflname> <bind IP addr>\n" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+	printf("\nReflector Name: %s\n", REFLECTOR_CALLSIGN);
+	printf("Bind IP Address: %s\n", MY_IP_ADDRESS);
+#endif
 
 	// delete the old pidfile. this will reset the web uptimer.
 	if (::remove(PIDFILE_PATH))

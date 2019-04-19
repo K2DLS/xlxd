@@ -35,8 +35,8 @@ install :
 	ln -s $(shell pwd)/$(EXECUTABLE).whitelist $(CFGDIR)/$(EXECUTABLE).whitelist
 	ln -s $(shell pwd)/$(EXECUTABLE).interlink $(CFGDIR)/$(EXECUTABLE).interlink
 	cp -f ../systemd/$(EXECUTABLE).service /lib/systemd/system/
-#	Uncomment the following line for a compact, stripped binary	
-#	strip -p $(EXECUTABLE)
+	if [ ! -f /etc/default/xlxd ]; then cp ../config/xlxd /etc/default; fi
+	strip -p $(EXECUTABLE)
 	cp -f $(EXECUTABLE) $(BINDIR)
 	mkdir -p $(DATADIR)
 	systemctl enable $(EXECUTABLE).service

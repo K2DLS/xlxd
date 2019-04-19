@@ -93,7 +93,7 @@ bool CTranscoder::Init(void)
 	m_Ip = g_Reflector.GetTranscoderIp();
 
 	// create our socket
-	ok = m_Socket.Open(TRANSCODER_PORT);
+	ok = m_Socket.Open(TRANSCODER_SRC_PORT);
 	if ( ok ) {
 		// start  thread;
 		m_pThread = new std::thread(CTranscoder::Thread, this);
