@@ -46,6 +46,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 // defines
 
+// transcoder --------------------------------------------------
+
+#define TRANSCODED_CHANNELS	"ABCDF"	// only these channels will be trancoded
+
 // global ------------------------------------------------------
 
 #define JSON_MONITOR
