@@ -84,10 +84,12 @@ bool CController::Init(void)
     {
         // start  thread;
         m_pThread = new std::thread(CController::Thread, this);
+	std::cout << "Successfully opened socket on port " << TRANSCODER_PORT << std::endl;
     }
     else
     {
-        std::cout << "Error opening socket on port UDP" << TRANSCODER_PORT << " on ip " << m_Ip << std::endl;
+	std::cout << "Error opening socket on " << m_Ip << ":" << TRANSCODER_PORT << std::endl;
+        return false;
     }
 
     // done

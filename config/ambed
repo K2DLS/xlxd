@@ -1,0 +1,4 @@
+# Set to desired bind IPv4 address.  If commented out or this file is missing,
+# bind address will default to 127.0.0.1.
+#
+# IPADDR=0.0.0.0

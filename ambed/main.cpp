@@ -25,6 +25,7 @@
 //#include <sys/stat.h>
 #include <signal.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "main.h"
 #include "cambeserver.h"
@@ -45,7 +46,7 @@ static void sigCatch(int signum)
 	return;
 }
 
-int main(int argc, const char ** /*argv*/)
+int main(int argc, const char *argv[])
 {
 	struct sigaction act;
 
@@ -63,13 +64,25 @@ int main(int argc, const char ** /*argv*/)
 		return EXIT_FAILURE;
 	}
 
-    // check arguments
-    if ( argc != 1 )
-    {
-        std::cerr << "Usage: ambed" << std::endl;
-        std::cerr << "The IP address is set in Main.h" << std::endl;
+    // Check for valid IP argument
+    char IP_ADDRESS[16];
+
+    if ( argc == 2 ) {
+        strcpy(IP_ADDRESS, argv[1]);
+    }
+    else if (argc == 1) {
+        strcpy(IP_ADDRESS, "127.0.0.1");
+    }
+
+    // check for valid number of args
+    if ( argc > 2 ) {
+        std::cerr << "Usage: ambed IP.ADDR.TO.BIND" << std::endl;
+        std::cerr << "IP Address Parameter is optional.  If ommited, ambed binds to all interfaces." << std::endl;
         return EXIT_FAILURE;
     }
+
+    g_AmbeServer.SetListenIp(CIp(IP_ADDRESS));
+    std::cout << "Setting IP address to " << IP_ADDRESS << std::endl;
 
     // initialize ambeserver
     g_AmbeServer.SetListenIp(CIp(IP_ADDRESS));

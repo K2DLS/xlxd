@@ -29,8 +29,11 @@ clean :
 
 # The install and uninstall targets need to be run by root
 install :
-	cp $(EXECUTABLE) $(BINDIR)
-	cp ../systemd/ambed.service /lib/systemd/system/
+#	Uncomment the following line for a compact, stripped binary
+#	strip -p $(EXECUTABLE)
+	/bin/cp -f $(EXECUTABLE) $(BINDIR)
+	/bin/cp -f ../systemd/ambed.service /lib/systemd/system/
+	if [ ! -f /etc/default/ambed ]; then cp ../config/ambed /etc/default; fi
 	systemctl enable ambed
 	systemctl daemon-reload
 	systemctl start ambed
@@ -38,4 +41,6 @@ install :
 uninstall :
 	systemctl stop ambed
 	systemctl disable ambed
-	rm -f $(BINDIR)/ambed
+	/bin/rm -f /lib/systemd/system/ambed.service
+	systemctl daemon-reload
+	/bin/rm -f $(BINDIR)/ambed

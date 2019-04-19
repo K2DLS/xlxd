@@ -5,9 +5,10 @@ After=systemd-user-session.service network.target
 
 [Service]
 Type=simple
+EnvironmentFile=-/etc/default/ambed
 ExecStartPre=-/sbin/rmmod ftdi_sio
 ExecStartPre=-/sbin/rmmod usbserial
-ExecStart=/usr/local/bin/ambed
+ExecStart=/usr/local/bin/ambed $IPADDR
 Restart=always
 
 [Install]
